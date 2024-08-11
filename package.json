@@ -1,0 +1,19 @@
+{
+  "name": "muwisync",
+  "version": "1.0.0",
+  "description": "Demonstration of Multiple Window Syncronization",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc ./index.ts -w",
+    "server": "python3 -m http.server 6969"
+  },
+  "keywords": [
+    "multiple-window-sync",
+    "multiple-windows"
+  ],
+  "author": "jus1d",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
