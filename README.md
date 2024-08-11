@@ -1,6 +1,6 @@
 # muwisync
 
-## Multiple Window Syncronization demo
+## Multiple Window Syncrhonization demo
 
 Inspired by YouTube [demos](https://youtu.be/Qy0lRh-jAOU?si=GySgd29NsoMKbeE0)
 
