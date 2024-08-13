@@ -5,6 +5,8 @@ interface Windo {
   y: number,
 }
 
+const RADIUS: number = 80;
+
 const drawCircle = (ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, color: string) => {
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, 2 * Math.PI);
@@ -85,7 +87,7 @@ const updateCanvasSize = (ctx: CanvasRenderingContext2D) => {
     windos.forEach((windo: Windo) => {
       let [canvasX, canvasY] = screenToCanvasCoordinates(ctx.canvas, windo.x, windo.y);
 
-      drawCircle(ctx, canvasX, canvasY, 100, windo.color);
+      drawCircle(ctx, canvasX, canvasY, RADIUS, windo.color);
     });
 
     requestAnimationFrame(render);

@@ -1,4 +1,5 @@
 "use strict";
+const RADIUS = 80;
 const drawCircle = (ctx, cx, cy, r, color) => {
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, 2 * Math.PI);
@@ -61,7 +62,7 @@ const updateCanvasSize = (ctx) => {
         windo.y = y;
         windos.forEach((windo) => {
             let [canvasX, canvasY] = screenToCanvasCoordinates(ctx.canvas, windo.x, windo.y);
-            drawCircle(ctx, canvasX, canvasY, 100, windo.color);
+            drawCircle(ctx, canvasX, canvasY, RADIUS, windo.color);
         });
         requestAnimationFrame(render);
     };
