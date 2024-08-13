@@ -18,12 +18,6 @@ const updateCanvasSize = (ctx) => {
     ctx.canvas.width = window.innerWidth;
     ctx.canvas.height = window.innerHeight;
 };
-const log = (ctx) => {
-    console.log(`Inner size: ${window.innerWidth}px by ${window.innerHeight}px`);
-    console.log(`Outer size: ${window.outerWidth}px by ${window.outerHeight}px`);
-    console.log(`Canvas size: ${ctx.canvas.width}px by ${ctx.canvas.height}px`);
-    console.log(`Screen size: ${window.screen.width}px by ${window.screen.height}px`);
-};
 (() => {
     let canvas = document.getElementById("windo");
     if (canvas === null)
@@ -31,14 +25,26 @@ const log = (ctx) => {
     let ctx = canvas.getContext("2d");
     if (ctx === null)
         throw new Error("2d context does not supported");
-    let windo = {
-        x: window.screen.width / 2,
-        y: window.screen.height / 2,
-    };
+    let windos = [
+        {
+            x: window.screen.width / 2,
+            y: window.screen.height / 2,
+        },
+        {
+            x: window.screen.width / 3,
+            y: window.screen.height / 3,
+        },
+        {
+            x: window.screen.width / 3 * 2,
+            y: window.screen.height / 3 * 2,
+        }
+    ];
     const render = () => {
         updateCanvasSize(ctx);
-        let [canvasX, canvasY] = screenToCanvasCoordinates(ctx.canvas, windo.x, windo.y);
-        drawCircle(ctx, canvasX, canvasY, 100, "red");
+        windos.forEach((windo) => {
+            let [canvasX, canvasY] = screenToCanvasCoordinates(ctx.canvas, windo.x, windo.y);
+            drawCircle(ctx, canvasX, canvasY, 100, "white");
+        });
         requestAnimationFrame(render);
     };
     render();

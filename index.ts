@@ -36,16 +36,30 @@ const updateCanvasSize = (ctx: CanvasRenderingContext2D) => {
   let ctx = canvas.getContext("2d");
   if (ctx === null) throw new Error("2d context does not supported");
 
-  let windo: Windo = {
-    x: window.screen.width / 2,
-    y: window.screen.height / 2,
-  };
+  let windos: Array<Windo> = [
+    {
+      x: window.screen.width / 2,
+      y: window.screen.height / 2,
+    },
+    {
+      x: window.screen.width / 3,
+      y: window.screen.height / 3,
+    },
+    {
+      x: window.screen.width / 3 * 2,
+      y: window.screen.height / 3 * 2,
+    }
+  ];
 
   const render = () => {
     updateCanvasSize(ctx);
-    let [canvasX, canvasY] = screenToCanvasCoordinates(ctx.canvas, windo.x, windo.y);
 
-    drawCircle(ctx, canvasX, canvasY, 100, "red");
+    windos.forEach((windo: Windo) => {
+      let [canvasX, canvasY] = screenToCanvasCoordinates(ctx.canvas, windo.x, windo.y);
+
+      drawCircle(ctx, canvasX, canvasY, 100, "white");
+    });
+
     requestAnimationFrame(render);
   };
 
