@@ -56,6 +56,7 @@ const updateCanvasSize = (ctx: CanvasRenderingContext2D) => {
   let ctx = canvas.getContext("2d");
   if (ctx === null) throw new Error("2d context does not supported");
 
+  // TODO: store windows in local storage (?)
   let windos: Array<Windo> = [
     {
       color: randomColor(),
