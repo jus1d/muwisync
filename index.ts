@@ -18,30 +18,30 @@ const drawCircle = (ctx: CanvasRenderingContext2D, cx: number, cy: number, r: nu
 const randomColor = (): string => `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
 
 const screenToCanvasCoordinates = (canvas: HTMLCanvasElement, screenX: number, screenY: number): [number, number] => {
-    const rect = canvas.getBoundingClientRect();
+  const rect = canvas.getBoundingClientRect();
 
-    const canvasX = screenX - rect.left - window.screenX;
-    const canvasY = screenY - rect.top - window.screenY;
+  const canvasX = screenX - rect.left - window.screenX;
+  const canvasY = screenY - rect.top - window.screenY;
 
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
 
-    return [canvasX * scaleX, canvasY * scaleY];
+  return [canvasX * scaleX, canvasY * scaleY];
 }
 
 const canvasToScreenCoordinates = (canvas: HTMLCanvasElement, canvasX: number, canvasY: number): [number, number] => {
-    const rect = canvas.getBoundingClientRect();
+  const rect = canvas.getBoundingClientRect();
 
-    const scaleX = rect.width / canvas.width;
-    const scaleY = rect.height / canvas.height;
+  const scaleX = rect.width / canvas.width;
+  const scaleY = rect.height / canvas.height;
 
-    const relativeX = canvasX * scaleX + rect.left;
-    const relativeY = canvasY * scaleY + rect.top;
+  const relativeX = canvasX * scaleX + rect.left;
+  const relativeY = canvasY * scaleY + rect.top;
 
-    const screenX = relativeX + window.screenX;
-    const screenY = relativeY + window.screenY;
+  const screenX = relativeX + window.screenX;
+  const screenY = relativeY + window.screenY;
 
-    return [screenX, screenY];
+  return [screenX, screenY];
 }
 
 const updateCanvasSize = (ctx: CanvasRenderingContext2D) => {
@@ -76,22 +76,39 @@ const updateCanvasSize = (ctx: CanvasRenderingContext2D) => {
   ];
 
   const render = () => {
-    updateCanvasSize(ctx);
+    let lastFpsTime = 0;
+    let frames = 0;
+    let fps = 0;
 
-    let windo: Windo = windos[0];
+    const renderLoop = (currentTime: number) => {
+      frames++;
+      if (currentTime - lastFpsTime >= 1000) {
+        fps = frames;
+        frames = 0;
+        lastFpsTime = currentTime;
+      }
 
-    let [x, y] = canvasToScreenCoordinates(ctx.canvas, ctx.canvas.width / 2, ctx.canvas.height / 2);
+      updateCanvasSize(ctx);
 
-    windo.x = x;
-    windo.y = y;
+      let windo: Windo = windos[0];
 
-    windos.forEach((windo: Windo) => {
-      let [canvasX, canvasY] = screenToCanvasCoordinates(ctx.canvas, windo.x, windo.y);
+      let [screenX, screenY] = canvasToScreenCoordinates(ctx.canvas, ctx.canvas.width / 2, ctx.canvas.height / 2);
+      windo.x = screenX;
+      windo.y = screenY;
 
-      drawCircle(ctx, canvasX, canvasY, RADIUS, windo.color);
-    });
+      windos.forEach((windo: Windo) => {
+        let [canvasX, canvasY] = screenToCanvasCoordinates(ctx.canvas, windo.x, windo.y);
+        drawCircle(ctx, canvasX, canvasY, RADIUS, windo.color);
+      });
 
-    requestAnimationFrame(render);
+      ctx.font = "15px Arial";
+      ctx.fillStyle = "white";
+      ctx.fillText(`${fps} FPS`, 10, 20);
+
+      requestAnimationFrame(renderLoop);
+    };
+
+    requestAnimationFrame(renderLoop);
   };
 
   render();

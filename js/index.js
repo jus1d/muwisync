@@ -37,6 +37,7 @@ const updateCanvasSize = (ctx) => {
     let ctx = canvas.getContext("2d");
     if (ctx === null)
         throw new Error("2d context does not supported");
+    // TODO: store windows in local storage (?)
     let windos = [
         {
             color: randomColor(),
@@ -55,16 +56,31 @@ const updateCanvasSize = (ctx) => {
         }
     ];
     const render = () => {
-        updateCanvasSize(ctx);
-        let windo = windos[0];
-        let [x, y] = canvasToScreenCoordinates(ctx.canvas, ctx.canvas.width / 2, ctx.canvas.height / 2);
-        windo.x = x;
-        windo.y = y;
-        windos.forEach((windo) => {
-            let [canvasX, canvasY] = screenToCanvasCoordinates(ctx.canvas, windo.x, windo.y);
-            drawCircle(ctx, canvasX, canvasY, RADIUS, windo.color);
-        });
-        requestAnimationFrame(render);
+        let lastFpsTime = 0;
+        let frames = 0;
+        let fps = 0;
+        const renderLoop = (currentTime) => {
+            frames++;
+            if (currentTime - lastFpsTime >= 1000) {
+                fps = frames;
+                frames = 0;
+                lastFpsTime = currentTime;
+            }
+            updateCanvasSize(ctx);
+            let windo = windos[0];
+            let [screenX, screenY] = canvasToScreenCoordinates(ctx.canvas, ctx.canvas.width / 2, ctx.canvas.height / 2);
+            windo.x = screenX;
+            windo.y = screenY;
+            windos.forEach((windo) => {
+                let [canvasX, canvasY] = screenToCanvasCoordinates(ctx.canvas, windo.x, windo.y);
+                drawCircle(ctx, canvasX, canvasY, RADIUS, windo.color);
+            });
+            ctx.font = "15px Arial";
+            ctx.fillStyle = "white";
+            ctx.fillText(`${fps} FPS`, 10, 20);
+            requestAnimationFrame(renderLoop);
+        };
+        requestAnimationFrame(renderLoop);
     };
     render();
 })();
